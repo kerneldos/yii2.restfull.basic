@@ -2,9 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\Link;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
@@ -33,6 +35,7 @@ class SiteController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'logout' => ['post'],
+                    'delete' => ['POST'],
                 ],
             ],
         ];
@@ -41,8 +44,7 @@ class SiteController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function actions()
-    {
+    public function actions(): array {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -55,13 +57,24 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays homepage.
+     * Lists all Link models.
      *
      * @return string
      */
-    public function actionIndex()
-    {
+    public function actionIndex(): string {
         return $this->render('index');
+    }
+
+    /**
+     * @param string $hash
+     *
+     * @return Response
+     */
+    public function actionView(string $hash): Response {
+        $model = Link::findOne(['hash' => $hash]);
+        $model->updateCounters(['counter' => 1]);
+
+        return $this->redirect($model->url);
     }
 
     /**
