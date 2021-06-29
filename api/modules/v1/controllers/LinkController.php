@@ -27,7 +27,7 @@ class LinkController extends Controller {
     public function actionCreate() {
         $model = new Link(['url' => Yii::$app->request->post('url')]);
 
-        return $model->save() ? $model : $model->errors;
+        return $model->save() ? $model : ['errors' => $model->errors];
     }
 
     /**

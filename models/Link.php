@@ -61,6 +61,7 @@ class Link extends \yii\db\ActiveRecord
     public function rules(): array {
         return [
             [['url'], 'required'],
+            ['url', 'url', 'defaultScheme' => 'http'],
             [['counter', 'created_by'], 'integer'],
             ['counter', 'default', 'value' => 0],
             [['created_at', 'created_by'], 'safe'],
